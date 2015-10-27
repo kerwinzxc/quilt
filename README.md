@@ -63,6 +63,11 @@ Stops the specified threads.
 
 Immediately resumes the specified threads.
 
+Related
+---
+
+- [coil](https://github.com/rxi/coil)
+
 License
 ---
 
