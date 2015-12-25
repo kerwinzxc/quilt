@@ -7,7 +7,7 @@ end
 
 function quilt.add(thread, ...)
   if not thread then return end
-  quilt.threads[thread] = coroutine.create(thread)
+  quilt.threads[thread] = type(thread) == 'thread' and thread or coroutine.create(thread)
   quilt.delays[thread] = 0
   return thread, quilt.add(...)
 end
@@ -31,11 +31,11 @@ function quilt.update(dt)
       local _, delay = coroutine.resume(cr)
       if coroutine.status(cr) == 'dead' then
         quilt.remove(thread)
-        if type(delay) == 'function' then
+        if type(delay) == 'function' or type(delay) == 'thread' then
           quilt.add(delay)
         end
       else
-        quilt.delays[thread] = delay or 0
+        quilt.delays[thread] = type(delay) == 'number' and delay or 0
       end
     else
       quilt.delays[thread] = quilt.delays[thread] - dt
